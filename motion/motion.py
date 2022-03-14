@@ -413,7 +413,7 @@ if __name__ == "motion":
             :returns data: Image data information
             """
             # to run on linux - ret, data = cam.readFrame()
-            ret, data = cam.readFrame()
+            # ret, data = cam.readFrame()
             # to run on Windows - ret, frame = cam.read()
             # ret, frame = cam.read()
             if not ret:
@@ -421,7 +421,7 @@ if __name__ == "motion":
 
             # to run on linux use - frame = data.imageData
             # If on windows comment this out.
-            frame = data.imageData # If on windows comment this out.
+            # frame = data.imageData # If on windows comment this out.
 
             if cv2.waitKey(20) & 0xFF == ord('q'):
                 break
@@ -473,7 +473,7 @@ if __name__ == "motion":
                     log.info('Initialisation stabilisation completed.')
                 if stabilisation_cnt < stabilise:
                     # comment out for windows, for linux - cam.returnFrameBuffer(data)
-                    cam.returnFrameBuffer(data)
+                    # cam.returnFrameBuffer(data)
                     continue
                 else:
                     stabilised = True
@@ -593,7 +593,7 @@ if __name__ == "motion":
                 :param data: Send image data back
             """
             # for windows comment out linux use - cam.returnFrameBuffer(data)
-            cam.returnFrameBuffer(data)
+            # cam.returnFrameBuffer(data)
 
         # Closing down.
         # cap.release()
