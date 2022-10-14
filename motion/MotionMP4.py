@@ -12,7 +12,7 @@ class MotionMP4:
     def __init__(self, path, size, version, frame_rate):
         self.path = path
         self.size = size
-        self.frame_rate = frame_rate 
+        self.frame_rate = frame_rate
         self.version = version
         self.writer = None
         self.filename = None
@@ -22,8 +22,8 @@ class MotionMP4:
             print('Creating output directory {}'.format(self.path))
             os.makedirs(self.path)
             # open(path, 'w').close()
-            
-        print ('Starting process with version {}'.format(self.version))
+
+        print('Starting process with version {}'.format(self.version))
         return
 
     def new_filename(self):
@@ -37,11 +37,9 @@ class MotionMP4:
     def open(self):
         # x264 = cv2.VideoWriter_fourcc(*'X264')
         avc1 = cv2.VideoWriter_fourcc(*'AVC1')
-        # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        # print('Opening output file {} '.format(self.new_filename()))
-        self.writer = cv2.VideoWriter(self.new_filename(), avc1, self.frame_rate, self.size)
+        mp4v = cv2.VideoWriter_fourcc(*'mp4v')
+        self.writer = cv2.VideoWriter(self.new_filename(), mp4v, self.frame_rate, self.size)
         return self.writer
-
 
     def close(self):
         self.writer.release()
@@ -58,10 +56,9 @@ class MotionMP4:
 
     def get_pathname(self):
         return self.filepath
-    
+
     def get_version(self):
         return self.version
-
 
 
 if __name__ == "__main__":
