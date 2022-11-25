@@ -112,7 +112,7 @@ class Picamera2:
         lores_size = (self.lores_width, self.lores_height)
         if name == "main" and not image_size == main_size and not main_size == (None, None):
             shape = image.shape
-            print(f'Shape: {shape} Size: {main_size}')
+            # print(f'Shape: {shape} Size: {main_size}')
             image = cv2.resize(image, main_size, interpolation=cv2.INTER_LINEAR)
 
         elif name == "lores" and not image_size == lores_size and not lores_size == (None, None):
