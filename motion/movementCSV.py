@@ -9,6 +9,7 @@ MovementsCSV class.
 Writes a CSV file containing peak movements CSV file.
 """
 
+
 class MovementCSV:
     def __init__(self, debug=False, interval=60):
         self.debug = debug
@@ -30,8 +31,8 @@ class MovementCSV:
         self.now = datetime.now()
         self.csv_file = "peakMovement.csv"
         self.columns = ['Timestamp', 'Trigger Point', 'Trigger Point Base',
-                                 'Subtraction Threshold', 'Subtraction History', 'Average',
-                                 'Highest Peak', 'Trigger Value']
+                        'Subtraction Threshold', 'Subtraction History', 'Average',
+                        'Highest Peak', 'Trigger Value']
         if not os.path.isfile(self.csv_file):
             self.create()
 
@@ -47,6 +48,7 @@ class MovementCSV:
     """
     Called after the parameters are read.
     """
+
     def update_parameters(self, _trigger_point, _trigger_point_base,
                           _subtraction_threshold, _subtraction_history):
         if self.debug:
@@ -58,10 +60,10 @@ class MovementCSV:
         if not os.path.isfile(self.csv_file):
             self.create()
 
-
     """
     Call this at every frame read.
     """
+
     def log_level(self, movement_level):
         if self.debug:
             print('CSV:update_movement')
@@ -92,8 +94,9 @@ class MovementCSV:
     """
     To be called when motion is detected.
     if sighup is set to true a record is written with 
-    values set temporaroly set to 1.
+    values set temporarily set to 1.
     """
+
     def log_motion(self, _motion_level):
         if self.debug:
             print('CSV:log_motion')
@@ -102,11 +105,45 @@ class MovementCSV:
         if self.trigger_highest < _motion_level:
             self.trigger_highest = _motion_level
 
+    """
+    Call this after motion comes to an end.
+    """
 
+    def motion_write(self, sighup=False):
+        if self.debug:
+            print('CSV:motion_write')
+        if not os.path.isfile(self.csv_file):
+            self.create()
+        if not sighup:
+            with open(self.csv_file, 'a', newline='') as file:
+                _writer = csv.DictWriter(file, fieldnames=self.columns)
+                timestamp = self.now.strftime("%Y-%m-%d %H:%M")
+                _writer.writerow({"Timestamp": timestamp,
+                                  'Trigger Point': self.trigger_point,
+                                  'Trigger Point Base': self.trigger_point_base,
+                                  'Subtraction Threshold': self.subtraction_threshold,
+                                  'Subtraction History': self.subtraction_history,
+                                  "Average": self.movement_average,
+                                  "Highest Peak": self.movement_highest,
+                                  "Trigger Value": self.trigger_highest})
+            self.trigger_highest = 0
+        else:
+            with open(self.csv_file, 'a', newline='') as file:
+                _writer = csv.DictWriter(file, fieldnames=self.columns)
+                timestamp = self.now.strftime("%Y-%m-%d %H:%M")
+                _writer.writerow({"Timestamp": timestamp,
+                                  'Trigger Point': 1,
+                                  'Trigger Point Base': 1,
+                                  'Subtraction Threshold': self.subtraction_threshold,
+                                  'Subtraction History': self.subtraction_history,
+                                  "Average": 1,
+                                  "Highest Peak": 1,
+                                  "Trigger Value": 1})
 
     """
     Called every minuite.
     """
+
     def write(self):
         if self.debug:
             print('CSV:write')
@@ -124,37 +161,3 @@ class MovementCSV:
                                      "Highest Peak": self.movement_highest,
                                      "Trigger Value": 0})
         self.movement_highest = 0
-
-    """
-    Call this after motion comes to an end.
-    """
-    def motion_write(self, sighup=False):
-        if self.debug:
-            print('CSV:motion_write')
-        if not os.path.isfile(self.csv_file):
-            self.create()
-        if not sighup:
-            with open(self.csv_file, 'a', newline='') as file:
-                _writer = csv.DictWriter(file, fieldnames=self.columns)
-                timestamp = self.now.strftime("%Y-%m-%d %H:%M")
-                _writer.writerow({"Timestamp": timestamp,
-                                         'Trigger Point': self.trigger_point,
-                                         'Trigger Point Base': self.trigger_point_base,
-                                         'Subtraction Threshold': self.subtraction_threshold,
-                                         'Subtraction History': self.subtraction_history,
-                                         "Average": self.movement_average,
-                                         "Highest Peak": self.movement_highest,
-                                         "Trigger Value": self.trigger_highest})
-            self.trigger_highest = 0
-        else:
-            with open(self.csv_file, 'a', newline='') as file:
-                _writer = csv.DictWriter(file, fieldnames=self.columns)
-                timestamp = self.now.strftime("%Y-%m-%d %H:%M")
-                _writer.writerow({"Timestamp": timestamp,
-                                         'Trigger Point': 1,
-                                         'Trigger Point Base': 1,
-                                         'Subtraction Threshold': self.subtraction_threshold,
-                                         'Subtraction History': self.subtraction_history,
-                                         "Average": 1,
-                                         "Highest Peak": 1,
-                                         "Trigger Value": 1})
