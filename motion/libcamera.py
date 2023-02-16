@@ -1,10 +1,13 @@
 """
 This is a stub for testing Picamera2 on a windows platform.
 """
+
+
 class libcamera:
 
     def __init__(self):
         pass
+
 
 class Transform:
     hflip = None
@@ -13,6 +16,7 @@ class Transform:
     def __init__(self, hflip=False, vflip=False):
         Transform.hflip = hflip
         Transform.vflip = vflip
+
 
 print(__name__)
 if __name__ == "__main__":
@@ -29,3 +33,7 @@ class ColorSpace:
     @classmethod
     def Sycc(cls):
         pass
+
+
+def controls():
+    return None

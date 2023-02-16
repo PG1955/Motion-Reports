@@ -7,10 +7,10 @@ import argparse
 # initializing an argument parser object
 ap = argparse.ArgumentParser()
 
-# Allow cmd line imput of image and mask file names.
+# Allow cmd line input of image and mask file names.
 ap.add_argument("-i", "--image", required=True, help="Path to the image")
 ap.add_argument("-m", "--mask", required=True, help="Path for writing the mask")
-ap.add_argument("-z", "--zoom", help="Zoom factor isan integer",default=1)
+ap.add_argument("-z", "--zoom", help="Zoom factor integer", default=1)
 
 # parsing the argument
 args = vars(ap.parse_args())
@@ -24,12 +24,12 @@ print('When complete hit the p key to Preview the mask.')
 print('To write a new mask hit the s key to Save it.')
 print('Hit escape key to abort.')
 
-
 # Create log_point matrix get coordinates of mouse click on image
 array = np.empty((0, 3), np.int32)
 
 counter = 0
 circle = 1
+
 
 def mousePoints(event, x, y, flags, params):
     global counter
@@ -40,10 +40,11 @@ def mousePoints(event, x, y, flags, params):
         array = np.append(array, np.array([[circle, x, y]]), axis=0)
         counter = counter + 1
 
+
 def getPoints(array, index):
     # print(f'Inbound array shape is {array.shape}')
     points = np.empty((0, 2), np.int32)
-    for x,y,z in array:
+    for x, y, z in array:
         if x == index:
             points = np.append(points, np.array([[y, z]]), axis=0)
     return points
@@ -73,10 +74,10 @@ while True:
     key = cv2.waitKey(3)
     # if key == 27:
     if key == ord('c'):
-        color=(100,100,100)
+        color = (100, 100, 100)
         cv2.polylines(image, [points], isClosed=True, color=(255, 0, 0), thickness=3, lineType=cv2.LINE_AA)
         cv2.imshow("Original Image ", image)
-        cv2.fillPoly(mask, [points], color=(255,0,0))
+        cv2.fillPoly(mask, [points], color=(255, 0, 0))
         circle += 1
         counter = 0
 
@@ -88,8 +89,6 @@ while True:
         cv2.destroyAllWindows()
         sys.exit(0)
 
-
-
     # Showing original image
     cv2.imshow("Original Image ", image)
     # Mouse click event on original image
@@ -98,7 +97,7 @@ while True:
 cv2.waitKey(0)
 if zoom > 1:
     image_height = int(image_height / zoom)
-    image_width  = int(image_width/ zoom)
+    image_width = int(image_width / zoom)
     mask = cv2.resize(mask, (image_width, image_height), interpolation=cv2.INTER_LINEAR)
 
 if not cv2.imwrite(args["mask"], mask):

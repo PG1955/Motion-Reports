@@ -9,6 +9,7 @@ MovementsCSV class.
 Writes a CSV file containing peak movements CSV file.
 """
 
+
 class ObjectsCSV:
     def __init__(self, debug=False):
         self.debug = debug
@@ -29,10 +30,10 @@ class ObjectsCSV:
             # writing headers (field names)
             _writer.writeheader()
 
-
     """
     Write a record
     """
+
     def write(self, filename, item):
         if self.debug:
             print('CSV:write')
@@ -44,7 +45,6 @@ class ObjectsCSV:
             return _writer.writerow({"Timestamp": timestamp,
                                      'Filename': filename,
                                      'Object': item})
-
 
 # if os.path.exists('objects.csv'):
 #     os.remove('objects.csv')

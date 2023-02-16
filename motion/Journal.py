@@ -1,6 +1,6 @@
-
 def main():
     j = journal('Motion')
+
 
 class journal:
 
@@ -9,6 +9,7 @@ class journal:
 
     def write(message):
         print(message)
+
 
 if __name__ == "__main__":
     main()

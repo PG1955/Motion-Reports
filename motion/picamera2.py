@@ -63,7 +63,6 @@ class Picamera2:
         self._add_display_and_encode(config, display, encode)
         return config
 
-
     def create_preview_configuration(self, main={}, lores=None, raw=None, transform=False,
                                      colour_space=None, buffer_count=4, controls={},
                                      display="main", encode="main"):
@@ -232,6 +231,12 @@ class Picamera2:
     def stream_configuration(self, name="main") -> dict:
         """Return the stream configuration for the named stream."""
         return self.camera_config[name]
+
+    def capture_metadata(self):
+        return {'ExposureTime': 0.0, 'AnalogueGain': 0.0, 'ColourGains': (0.0, 0.0)}
+
+    def set_controls(self, param):
+        pass
 
 
 def close(self) -> None:

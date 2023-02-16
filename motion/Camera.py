@@ -14,7 +14,6 @@ def PixelFormat():
 
 
 class Camera:
-
     class PixelFormat:
         RGB888 = cv2.CAP_PVAPI_PIXELFORMAT_RGB24
 
@@ -29,7 +28,6 @@ class Camera:
         def imageData(self):
             ret, frame = self.capture_device.read()
             return frame
-
 
     def __init__(self):
         self.cap = None
