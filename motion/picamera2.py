@@ -10,6 +10,9 @@ class Picamera2:
     signal_event = None
 
     def __init__(self):
+        self.controls = None
+        self.AnalogueGain = None
+        self.ExposureTime = None
         self.camera_config = None
         self.sensor_format = None
         self.camera = 0
@@ -23,6 +26,17 @@ class Picamera2:
         self.lores_height = None
         self.main_width = None
         self.main_height = None
+        self.AnalogueGain = None
+        self.ExposureTime = None
+
+    def __enter__(self):
+        pass
+        # self._lock.acquire()
+        # return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        pass
+        # self._lock.release()
 
     def create_video_configuration(self, main={}, lores=None, raw=None, transform=libcamera.Transform(),
                                    colour_space=None, buffer_count=6, controls={}, display="main",
@@ -97,7 +111,7 @@ class Picamera2:
         return None
 
     def start(self) -> None:
-        if self.capture == None:
+        if self.capture is None:
             self.capture = cv2.VideoCapture(0)
 
     def capture_array_(self, name) -> bool:
@@ -236,7 +250,7 @@ class Picamera2:
         return {'ExposureTime': 0.0, 'AnalogueGain': 0.0, 'ColourGains': (0.0, 0.0)}
 
     def set_controls(self, param):
-        pass
+        return {'ExposureTime': 0.0, 'AnalogueGain': 0.0, 'ColourGains': (0.0, 0.0)}
 
 
 def close(self) -> None:

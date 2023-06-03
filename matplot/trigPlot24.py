@@ -4,7 +4,6 @@ import numpy as np
 from matplotlib import dates as mpl_dates
 import os
 
-
 plt.style.use('seaborn')
 
 data = pd.read_csv('peakMovement.csv')
@@ -27,40 +26,38 @@ sh = int(data['Subtraction History'].iloc[-1])
 tp = int(data['Trigger Point'].iloc[-1])
 tpb = int(data['Trigger Point Base'].iloc[-1])
 
-
-data['Trigger Value']=data['Trigger Value'].replace(0, np.nan)
+data['Trigger Value'] = data['Trigger Value'].replace(0, np.nan)
 
 if os.name == 'nt':
     ax1.set_title("Windows - Today's Average Peak Movement")
 else:
     ax1.set_title(str(os.uname()[1]) + " - Today's Average Peak Movement")
-    
+
 ax1.plot(time, data['Highest Peak'],
          color='purple',
          alpha=0.5,
          label='Highest Peak Movement'
-        )
+         )
 
 ax1.plot(time, data['Average'],
          color='deepskyblue',
          alpha=0.5,
          label='Average Peak Movement'
-        )
-        
-        
+         )
+
 ax1.plot(time, data['Trigger Point Base'],
          color='yellow',
          alpha=0.5,
          label=f'Trigger Point Base {tpb}'
-        )
-        
+         )
+
 ax1.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
          label=f'Trigger point {tp}'
-        )
+         )
 
-ax1.set_ylim([0,data['Trigger Point'].max() * 2])
+ax1.set_ylim([0, data['Trigger Point'].max() * 2])
 
 if os.name == 'nt':
     ax2.set_title("Windows - Today's Peak Movement")
@@ -71,14 +68,13 @@ ax2.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
          label=f'Trigger point {tp}'
-        )
-        
-        
+         )
+
 ax2.plot(time, data['Trigger Point Base'],
          color='yellow',
          alpha=0.5,
          label=f'Trigger Point Base {tpb}'
-        )
+         )
 
 ax2.plot(time, data['Subtraction Threshold'] * 10,
          color='pink',
@@ -94,7 +90,7 @@ ax2.plot(time, data['Subtraction History'],
 
 ax2.scatter(time, data['Trigger Value'], alpha=0.5, color='Red')
 
-ax2.set_ylim([0,data['Trigger Point'].max() * 2])
+ax2.set_ylim([0, data['Trigger Point'].max() * 2])
 
 plt.gcf().autofmt_xdate()
 date_format = mpl_dates.DateFormatter('%H %M')
