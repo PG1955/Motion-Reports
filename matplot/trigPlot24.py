@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import dates as mpl_dates
 import os
 
+
 plt.style.use('seaborn')
 
 data = pd.read_csv('peakMovement.csv')
@@ -17,47 +18,55 @@ fig, (ax1, ax2) = plt.subplots(2, sharex=True)
 
 time = data['Timestamp']
 
-# highest_max = data['Highest Peak'].max() * 1.20 # Add 20%.
-# trigger_max = data['Trigger Value'].max() * 1.20 # Add 20%.
-# peak_mean = data['Highest Peak'].mean()
-# trigger_mean = data['Trigger Value'].mean()
 st = int(data['Subtraction Threshold'].iloc[-1])
 sh = int(data['Subtraction History'].iloc[-1])
 tp = int(data['Trigger Point'].iloc[-1])
 tpb = int(data['Trigger Point Base'].iloc[-1])
+tpf = int(data['Trigger Point Frames'].iloc[-1])
 
-data['Trigger Value'] = data['Trigger Value'].replace(0, np.nan)
+ylim = int(data['Trigger Point'].iloc[-1]* 2)
+data.loc[data['Trigger Value'] >= ylim, 'Trigger Value'] = ylim
+data['Trigger Value']=data['Trigger Value'].replace(0, np.nan)
+
+
 
 if os.name == 'nt':
     ax1.set_title("Windows - Today's Average Peak Movement")
 else:
     ax1.set_title(str(os.uname()[1]) + " - Today's Average Peak Movement")
-
+    
 ax1.plot(time, data['Highest Peak'],
          color='purple',
          alpha=0.5,
          label='Highest Peak Movement'
-         )
+        )
 
 ax1.plot(time, data['Average'],
          color='deepskyblue',
          alpha=0.5,
          label='Average Peak Movement'
-         )
-
+        )
+        
+        
 ax1.plot(time, data['Trigger Point Base'],
          color='yellow',
          alpha=0.5,
          label=f'Trigger Point Base {tpb}'
-         )
-
+        )
+        
 ax1.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
          label=f'Trigger point {tp}'
-         )
+        )
+        
+ax1.plot(time, data['Trigger Point Frames'],
+         color='Orange',
+         alpha=0.5,
+         label=f'Trigger Point Frames {tpf}'
+        )
 
-ax1.set_ylim([0, data['Trigger Point'].max() * 2])
+ax1.set_ylim([0,ylim])
 
 if os.name == 'nt':
     ax2.set_title("Windows - Today's Peak Movement")
@@ -68,13 +77,20 @@ ax2.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
          label=f'Trigger point {tp}'
-         )
-
+        )
+        
+        
 ax2.plot(time, data['Trigger Point Base'],
          color='yellow',
          alpha=0.5,
          label=f'Trigger Point Base {tpb}'
-         )
+        )
+        
+ax2.plot(time, data['Trigger Point Frames'],
+         color='Orange',
+         alpha=0.5,
+         label=f'Trigger Point Frames {tpf}'
+        )
 
 ax2.plot(time, data['Subtraction Threshold'] * 10,
          color='pink',
@@ -90,7 +106,7 @@ ax2.plot(time, data['Subtraction History'],
 
 ax2.scatter(time, data['Trigger Value'], alpha=0.5, color='Red')
 
-ax2.set_ylim([0, data['Trigger Point'].max() * 2])
+ax2.set_ylim([0,ylim])
 
 plt.gcf().autofmt_xdate()
 date_format = mpl_dates.DateFormatter('%H %M')
@@ -100,7 +116,7 @@ plt.ylabel('Movement')
 ax1.legend(loc='best')
 ax2.legend(loc='best')
 
-plt.savefig('peak24.png')
+plt.savefig('peak24h.png')
 
 if os.name == 'nt':
     plt.show()

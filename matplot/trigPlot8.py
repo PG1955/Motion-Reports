@@ -7,7 +7,7 @@ import os
 plt.style.use('seaborn-v0_8')
 
 data = pd.read_csv('peakMovement.csv')
-data = data.tail(60)
+data = data.tail(480)
 
 data['Timestamp'] = pd.to_datetime(data['Timestamp'])
 
@@ -29,9 +29,9 @@ data.loc[data['Trigger Value'] >= ylim, 'Trigger Value'] = ylim
 data['Trigger Value']=data['Trigger Value'].replace(0, np.nan)
 
 if os.name == 'nt':
-    ax1.set_title('Windows -  Last 30 Minutes Average Peak Movement')
+    ax1.set_title('Windows -  Last 8 Hours Average Peak Movement')
 else:
-    ax1.set_title(str(os.uname()[1]) + ' -  Last 30 Minutes Average Peak Movement')
+    ax1.set_title(str(os.uname()[1]) + ' -  Last 8 Hours Average Peak Movement')
     
 ax1.plot(time, data['Highest Peak'],
          color='purple',
@@ -55,23 +55,21 @@ ax1.plot(time, data['Trigger Point Base'],
 ax1.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
-         label=f'Trigger Point {tp}'
+         label=f'Trigger point {tp}'
         )
-
+        
 ax1.plot(time, data['Trigger Point Frames'],
          color='Orange',
          alpha=0.5,
          label=f'Trigger Point Frames {tpf}'
         )
-        
-        
-ax1.set_ylim([0,ylim])
 
+ax1.set_ylim([0, ylim])
 
 if os.name == 'nt':
-    ax2.set_title('Windows - Last 30 Minutes Peak Movement')
+    ax2.set_title('Windows -  Last 8 Hours Average Peak Movement')
 else:
-    ax2.set_title(str(os.uname()[1]) + ' - Last 30 Minutes Peak Movement')
+    ax2.set_title(str(os.uname()[1]) + ' -  Last 8 Hours Average Peak Movement')
 
 
 ax2.plot(time, data['Trigger Point'],
@@ -107,7 +105,7 @@ ax2.plot(time, data['Subtraction History'],
 
 ax2.scatter(time, data['Trigger Value'], alpha=0.5, color='Red')
 
-ax2.set_ylim([0,ylim])
+ax2.set_ylim([0, ylim])
 
 plt.gcf().autofmt_xdate()
 date_format = mpl_dates.DateFormatter('%H %M')
@@ -117,7 +115,7 @@ plt.ylabel('Movement')
 ax1.legend(loc='best')
 ax2.legend(loc='best')
 
-plt.savefig('peak30m.png')
+plt.savefig('peak8h.png')
 
 if os.name == 'nt':
     plt.show()

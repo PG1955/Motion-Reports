@@ -16,16 +16,14 @@ data.sort_values('Timestamp', inplace=True)
 fig, (ax1, ax2) = plt.subplots(2, sharex=True)
 
 time = data['Timestamp']
-# highest_peak = data['Highest Peak'].max() * 1.20 # Add 20%.
-# trigger_peak = data['Trigger Value'].max() * 1.20 # Add 20%.
-# peak_mean = data['Highest Peak'].mean()
-# peak_trim_mean = stats.trim_mean(data['Highest Peak'], 0.01)
-# trigger_mean = data['Trigger Value'].mean()
-# trigger_trim_mean = stats.trim_mean(data['Trigger Value'], 0.005)
+
 
 st = int(data['Subtraction Threshold'].iloc[-1])
 sh = int(data['Subtraction History'].iloc[-1])
 
+
+ylim = int(data['Trigger Point'].iloc[-1]* 2)
+data.loc[data['Trigger Value'] >= ylim, 'Trigger Value'] = ylim
 data['Trigger Value']=data['Trigger Value'].replace(0, np.nan)
 
 if os.name == 'nt':
@@ -64,13 +62,19 @@ ax1.plot(time, data['Trigger Point Base'],
          label='Trigger Point Base'
         )
         
+ax1.plot(time, data['Trigger Point Frames'],
+         color='orange',
+         alpha=0.5,
+         label='Trigger Point Frames'
+        )
+        
 ax1.plot(time, data['Trigger Point'],
          color='Green',
          alpha=0.5,
          label='Trigger point'
         )
 
-ax1.set_ylim([0,data['Trigger Point'].max() * 2])
+ax1.set_ylim([0, ylim])
 
 # plt.legend()
 
@@ -87,12 +91,17 @@ ax2.plot(time, data['Trigger Point'],
         )
         
         
-ax2.plot(time, data['Trigger Point Base'],
+ax2.plot(time, data['Trigger Point Frames'],
+         color='orange',
+         alpha=0.5,
+         label='Trigger Point Frames'
+        )
+
+ax1.plot(time, data['Trigger Point Base'],
          color='yellow',
          alpha=0.5,
          label='Trigger Point Base'
         )
-
 ax2.plot(time, data['Subtraction Threshold'] * 10,
          color='pink',
          alpha=0.5,
@@ -107,7 +116,7 @@ ax2.plot(time, data['Subtraction History'],
 
 ax2.scatter(time, data['Trigger Value'], alpha=0.5, color='Red')
 
-ax2.set_ylim([0,data['Trigger Point'].max() * 2])
+ax2.set_ylim([0, ylim])
 
 plt.gcf().autofmt_xdate()
 date_format = mpl_dates.DateFormatter('%a %H')
